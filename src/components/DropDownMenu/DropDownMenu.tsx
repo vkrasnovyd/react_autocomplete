@@ -5,6 +5,20 @@ import classNames from 'classnames';
 import { DropDownItem } from '../DropDownItem';
 import { ErrorBlock } from '../ErrorBlock';
 
+// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-unused-vars
+function debounce(callback: Function, delay: number) {
+  let timerId = 0;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (...args: any) => {
+    window.clearTimeout(timerId);
+
+    timerId = window.setTimeout(() => {
+      callback(...args);
+    }, delay);
+  };
+}
+
 interface Props {
   allPeople: Person[];
   onPersonChange: (index: number) => void;
@@ -22,12 +36,13 @@ export const DropDownMenu = ({ allPeople, onPersonChange }: Props) => {
   const isDropdownActive = !!filteredPeople.length;
   const errorMessage =
     appliedQuery && !isDropdownActive ? 'No matching suggestions' : '';
+  const applyQuery = debounce(setAppliedQuery, 1000);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
 
     setQuery(newValue);
-    setAppliedQuery(newValue);
+    applyQuery(newValue);
   };
 
   return (
