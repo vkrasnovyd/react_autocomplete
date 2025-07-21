@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/indent */
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Person } from '../../types/Person';
 import classNames from 'classnames';
 import { DropDownItem } from '../DropDownItem';
@@ -38,7 +38,7 @@ export const DropDownMenu = ({ allPeople, onPersonChange }: Props) => {
   const isDropdownActive = !!filteredPeople.length;
   const errorMessage =
     appliedQuery && !isDropdownActive ? 'No matching suggestions' : '';
-  const applyQuery = debounce(setAppliedQuery, 1000);
+  const applyQuery = useCallback(debounce(setAppliedQuery, 1000), []);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
