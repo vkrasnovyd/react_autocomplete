@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/indent */
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Person } from '../../types/Person';
 import classNames from 'classnames';
 import { DropDownItem } from '../DropDownItem';
@@ -28,11 +28,13 @@ export const DropDownMenu = ({ allPeople, onPersonChange }: Props) => {
   const [query, setQuery] = useState('');
   const [appliedQuery, setAppliedQuery] = useState('');
 
-  const filteredPeople = appliedQuery
-    ? [...allPeople].filter(person =>
-        person.name.toLowerCase().includes(appliedQuery.toLowerCase()),
-      )
-    : [];
+  const filteredPeople = useMemo(() => {
+    return appliedQuery
+      ? [...allPeople].filter(person =>
+          person.name.toLowerCase().includes(appliedQuery.toLowerCase()),
+        )
+      : [];
+  }, [allPeople, appliedQuery]);
   const isDropdownActive = !!filteredPeople.length;
   const errorMessage =
     appliedQuery && !isDropdownActive ? 'No matching suggestions' : '';
