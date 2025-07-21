@@ -1,4 +1,6 @@
-export const ErrorBlock = ({ errorMessage }: { errorMessage: string }) => {
+import React from 'react';
+
+const ErrorBlockComponent = ({ errorMessage }: { errorMessage: string }) => {
   return (
     errorMessage && (
       <div
@@ -17,3 +19,5 @@ export const ErrorBlock = ({ errorMessage }: { errorMessage: string }) => {
     )
   );
 };
+
+export const ErrorBlock = React.memo(ErrorBlockComponent);

@@ -1,3 +1,4 @@
+import React from 'react';
 import { Person } from '../../types/Person';
 
 interface Props {
@@ -6,7 +7,7 @@ interface Props {
   onClick: (index: number) => void;
 }
 
-export const DropDownItem = ({ person, allPeople, onClick }: Props) => {
+const DropDownItemComponent = ({ person, allPeople, onClick }: Props) => {
   return (
     <div
       className="dropdown-item"
@@ -21,3 +22,5 @@ export const DropDownItem = ({ person, allPeople, onClick }: Props) => {
     </div>
   );
 };
+
+export const DropDownItem = React.memo(DropDownItemComponent);
