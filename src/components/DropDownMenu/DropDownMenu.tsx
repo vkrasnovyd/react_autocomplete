@@ -1,23 +1,12 @@
 /* eslint-disable @typescript-eslint/indent */
-import { useCallback, useMemo, useState } from 'react';
-import { Person } from '../../types/Person';
 import classNames from 'classnames';
+import { useMemo, useRef, useState } from 'react';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { useDebouncedCallback } from 'use-debounce';
+
 import { DropDownItem } from '../DropDownItem';
 import { ErrorBlock } from '../ErrorBlock';
-
-// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-unused-vars
-function debounce(callback: Function, delay: number) {
-  let timerId = 0;
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return (...args: any) => {
-    window.clearTimeout(timerId);
-
-    timerId = window.setTimeout(() => {
-      callback(...args);
-    }, delay);
-  };
-}
+import { Person } from '../../types/Person';
 
 interface Props {
   allPeople: Person[];
@@ -38,9 +27,15 @@ export const DropDownMenu = ({ allPeople, onPersonChange }: Props) => {
   const isDropdownActive = !!filteredPeople.length;
   const errorMessage =
     appliedQuery && !isDropdownActive ? 'No matching suggestions' : '';
-  const applyQuery = useCallback(debounce(setAppliedQuery, 1000), []);
+  const applyQuery = useRef(
+    useDebouncedCallback((value: string) => {
+      setAppliedQuery(value);
+    }, 1000),
+  );
   const resetQuery = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+
+    // applyQuery.current.cancel();
     setQuery('');
     setAppliedQuery('');
   };
@@ -49,7 +44,7 @@ export const DropDownMenu = ({ allPeople, onPersonChange }: Props) => {
     const newValue = event.target.value;
 
     setQuery(newValue);
-    applyQuery(newValue);
+    applyQuery.current(newValue);
   };
 
   return (
