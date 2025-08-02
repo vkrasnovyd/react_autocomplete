@@ -39,6 +39,11 @@ export const DropDownMenu = ({ allPeople, onPersonChange }: Props) => {
   const errorMessage =
     appliedQuery && !isDropdownActive ? 'No matching suggestions' : '';
   const applyQuery = useCallback(debounce(setAppliedQuery, 1000), []);
+  const resetQuery = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setQuery('');
+    setAppliedQuery('');
+  };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
@@ -52,15 +57,25 @@ export const DropDownMenu = ({ allPeople, onPersonChange }: Props) => {
       <div
         className={classNames('dropdown', { 'is-active': isDropdownActive })}
       >
-        <div className="dropdown-trigger">
+        <div className="field has-addons">
           <input
             type="text"
             value={query}
             placeholder="Enter a part of the name"
-            className="input"
+            className="input search-input"
             onChange={handleInputChange}
+            id="search-input"
             data-cy="search-input"
           />
+          <button
+            type="button"
+            id="clear-search-button"
+            className="icon-button"
+            onClick={resetQuery}
+            aria-label="Clear search"
+          >
+            <i className="fas fa-times"></i>
+          </button>
         </div>
 
         <div className="dropdown-menu" role="menu" data-cy="suggestions-list">
