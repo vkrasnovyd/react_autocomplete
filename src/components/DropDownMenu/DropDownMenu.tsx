@@ -35,7 +35,7 @@ export const DropDownMenu = ({ allPeople, onPersonChange }: Props) => {
   const resetQuery = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    // applyQuery.current.cancel();
+    applyQuery.current.cancel();
     setQuery('');
     setAppliedQuery('');
   };
